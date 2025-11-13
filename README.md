@@ -26,7 +26,7 @@ In your `package.json` you can point to an entry file and a output dir with `mod
   "type": "module",
   "private": true,
   "dependencies": {
-    "tstp8": "link:tstp8"
+    "tstp8": "0.1.0"
   },
 }
 ```
