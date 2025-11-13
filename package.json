@@ -1,0 +1,38 @@
+{
+  "name": "tstp8",
+  "version": "0.0.1",
+  "description": "Convert your Typescript project to Pico-8 Lua",
+  "private": true,
+  "scripts": {
+    "build:js": "bun build ./src/declarations/constants.ts --production --target=bun --outfile ./out/constants.js",
+    "build:cli": "bun build ./src/index.ts --production --target=bun --external pnpapi --external typescript --outfile ./out/tstp8",
+    "dev": "bun run ./src/index.ts"
+  },
+  "types": "./src/declarations/pico8-global.d.ts",
+  "module": "./src/declarations/constants.ts",
+  "exports": {
+    ".": {
+      "types": "./src/declarations/pico8-global.d.ts",
+      "import": "./src/declarations/pico8-global.d.ts",
+      "require": "./src/declarations/pico8-global.d.ts"
+    },
+    "./constants": {
+      "import": "./src/declarations/constants.ts",
+      "types": "./src/declarations/constants.ts"
+    }
+  },
+  "bin": {
+    "tstp8": "./out/tstp8"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "typescript-to-lua": "^1.33.0"
+  },
+  "peerDependencies": {
+    "typescript": "^5.9.3"
+  },
+  "dependencies": {
+    "oxc-transform": "^0.97.0",
+    "zod": "^4.1.12"
+  }
+}

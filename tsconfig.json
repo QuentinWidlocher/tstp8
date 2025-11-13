@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    // Environment setup & latest features
+    "lib": [
+      "ESNext",
+    ],
+    "target": "ESNext",
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    // Best practices
+    "strict": true,
+    "skipLibCheck": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUncheckedIndexedAccess": true,
+    // "isolatedDeclarations": true,
+    // "declaration": true,
+    // "declarationDir": "out",
+    // "emitDeclarationOnly": true,
+    "rootDir": "./src",
+  },
+}

@@ -1,0 +1,22 @@
+{
+  "$schema": "https://raw.githubusercontent.com/TypeScriptToLua/TypeScriptToLua/master/tsconfig-schema.json",
+  "compilerOptions": {
+    // Environment setup & latest features
+    "lib": [
+      "ESNext"
+    ],
+    "target": "ESNext",
+    // Best practices
+    "strict": true,
+    "skipLibCheck": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUncheckedIndexedAccess": true,
+  },
+  "tstl": {
+    "luaTarget": "universal",
+    "luaLibImport": "inline",
+    "noHeader": true,
+    "noImplicitGlobalVariables": true,
+    "noImplicitSelf": false,
+  }
+}
