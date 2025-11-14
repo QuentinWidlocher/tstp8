@@ -1,4 +1,3 @@
-#!/usr/bin/env bun
 import { parseArgs } from "util";
 import { $ } from "bun";
 import { transpileProject, watchProject } from "./build";
@@ -100,6 +99,11 @@ const schema = z.object({
     .boolean()
     .default(false)
     .describe("Watch changes and rebuild the project"),
+
+  debug: z
+    .boolean()
+    .default(false)
+    .describe("Export .ts file used to transpile for debugging purpose"),
 });
 
 const { values } = parseArgs({
@@ -112,6 +116,10 @@ const { values } = parseArgs({
       type: "string",
     },
     watch: {
+      type: "boolean",
+      default: false,
+    },
+    debug: {
       type: "boolean",
       default: false,
     },

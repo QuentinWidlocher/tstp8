@@ -3,6 +3,7 @@ import path from "path";
 import * as tstl from "typescript-to-lua";
 import tsconfig from "../tsconfig.tstl.json";
 import { dts } from "./plugins/dts";
+import { tstp8Plugin } from "./plugins/tstp8";
 
 // We want to inline the contents of the file, not reference its types
 // @ts-expect-error
@@ -13,17 +14,15 @@ function removeModuleKeywords(str: string): string {
     .split("\n")
     .filter((l) => !l.startsWith("import"))
     .map((l) => l.replaceAll("export ", " "))
-    .join("\n")
+    .join("\n");
 }
 
 function transpile(str: string): string {
-  const lua = tstl.transpileString(
-    removeModuleKeywords(str),
-    {
-      ...tsconfig,
-      ...(tsconfig.tstl as tstl.TypeScriptToLuaOptions),
-    }
-  );
+  const lua = tstl.transpileString(removeModuleKeywords(str), {
+    ...tsconfig,
+    ...(tsconfig.tstl as tstl.TypeScriptToLuaOptions),
+    luaPlugins: [{ plugin: tstp8Plugin }],
+  });
 
   const result = lua.file?.lua;
 
@@ -42,10 +41,13 @@ async function optionalRm(dir: string) {
       throw e;
     }
   }
-
 }
 
-export async function transpileProject(entryPoint: string, outDir: string) {
+export async function transpileProject(
+  entryPoint: string,
+  outDir: string,
+  debug = false
+) {
   const t0 = performance.now();
 
   const srcDir = path.basename(path.dirname(entryPoint));
@@ -62,19 +64,9 @@ export async function transpileProject(entryPoint: string, outDir: string) {
         whitespace: false,
       },
       splitting: false,
-      plugins: [
-        dts(),
-      ],
+      plugins: [dts()],
       root: srcDir,
       outdir: outDir,
-      define: {
-        "console.debug": "printh",
-        "console.log": "printh",
-        "console.error": "printh",
-        "console.warning": "printh",
-        "console.info": "printh",
-        "console.table": "printh",
-      },
     });
 
     if (!result.success) {
@@ -87,11 +79,11 @@ export async function transpileProject(entryPoint: string, outDir: string) {
       });
     }
 
-    const jsContent = await result.outputs
+    const jsGameContent = await result.outputs
       .find((o) => o.kind == "entry-point")
       ?.text();
 
-    if (!jsContent) {
+    if (!jsGameContent) {
       throw new Error("Bad output", { cause: result.logs.join("\n") });
     }
 
@@ -109,24 +101,30 @@ export async function transpileProject(entryPoint: string, outDir: string) {
 
     const transpilePath = entryPoint.replace(new RegExp(`^${srcDir}`), outDir);
 
-    const jsFileToTranspile = removeModuleKeywords(`
-${pico8Declarations}
-${await Bun.file(declarationsPath).text()}
-${jsContent}
-    `);
+    const gameDeclarations = await Bun.file(declarationsPath).text();
+
+    const jsFileToTranspile = removeModuleKeywords(
+      [pico8Declarations, gameDeclarations, jsGameContent].join("\n")
+    );
 
     const luaContent = transpile(jsFileToTranspile);
 
     await Promise.all([
-      Bun.write(transpilePath, jsFileToTranspile),
+      debug ? Bun.write(transpilePath, jsFileToTranspile) : Promise.resolve(),
       Bun.write(luaPath, luaContent),
       optionalRm(declarationsPath),
       optionalRm(jsPath),
-    ])
+    ]);
 
     console.log(`Bundled file in ${(performance.now() - t0).toFixed(2)}ms`);
   } catch (e) {
-    if (!(e instanceof Error && "code" in e && (e.code == "EINVAL" || e.code == 'ENOENT'))) {
+    if (
+      !(
+        e instanceof Error &&
+        "code" in e &&
+        (e.code == "EINVAL" || e.code == "ENOENT")
+      )
+    ) {
       throw e;
     } else {
       // retry
@@ -135,14 +133,18 @@ ${jsContent}
   }
 }
 
-export async function watchProject(entryPoint: string, outDir: string) {
+export async function watchProject(
+  entryPoint: string,
+  outDir: string,
+  debug = false
+) {
   const srcDir = path.basename(path.dirname(entryPoint));
 
   const watcher = watch(srcDir, { recursive: true });
 
   for await (const event of watcher) {
     if (event.eventType == "change" && event.filename?.endsWith(".ts")) {
-      transpileProject(entryPoint, outDir);
+      transpileProject(entryPoint, outDir, debug);
     }
   }
 }

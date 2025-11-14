@@ -1,4 +1,4 @@
-import { Color } from "./constants";
+// Don't import in project, this is injected in the file we transpile to tell tstl about pico8
 
 declare function music(
   this: void,
@@ -52,7 +52,7 @@ declare function line(
   y1: number,
   col?: number
 ): void;
-declare function pal(this: void, c0: Color, c1: Color, p?: number): void;
+declare function pal(this: void, c0: number, c1: number, p?: number): void;
 declare function palt(this: void, col: number, t: boolean): void;
 declare function pget(this: void, x: number, y: number): number;
 declare function print(this: void, str: string): void;

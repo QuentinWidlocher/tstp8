@@ -2,7 +2,7 @@
 
 > Typescript to Pico-8
 
-**Experimental** : use Pico-8 with Typescript
+**Status: Experimental**
 
 ## Usage
 
@@ -26,7 +26,7 @@ In your `package.json` you can point to an entry file and a output dir with `mod
   "type": "module",
   "private": true,
   "dependencies": {
-    "tstp8": "0.1.0"
+    "tstp8": "0.2.0"
   },
 }
 ```
@@ -55,6 +55,24 @@ export function _draw(): void {
 }
 ```
 
+Now you can run `bun run tstp8` to transpile your game (in this example from `src/game.ts` into `out/game.lua`) and include the lua output in you pico8 cart :
+
+```
+pico-8 cartridge // http://www.pico-8.com
+version 43
+__lua__
+#include out/game.lua
+```
+
+You can also use arguments to configure tstp8 :
+
+|argument|value|default|description|
+|:---:|:---:|:---|:---|
+|`entryPoint`|path|`"main"` or `"module"` in your `package.json`|The entry point of your game, all imported files will be bundled|
+|`outDir`|path|`"exports": { "default" }` in your package.json|The output directory of your lua file. It will keep the name of your entry point|
+|`watch`|boolean|`false`|Watch the parent directory of your entry point and run the transpilation on every changes|
+|`debug`|boolean|`false`|Also output a `.ts` file in your `outDir`. It's the bundle js/d.ts given to TypescriptToLua|
+
 ## How it works
 
 `tstp8` uses several amazing tools :
@@ -65,19 +83,32 @@ export function _draw(): void {
  It uses Bun to bundle all javascript file, and oxc-transform (with a custom bun plugin) to generate its declaration.
  
  Then it put these two files inline to give TypeScriptToLua all it needs (hopefully) to transpile nicely.
- 
-*Upcoming*: TSTL plugin to make sure the lua code is compatible with Pico-8
+
+## Why...
+
+### ... typescript ?
+
+If you want to build efficient games for pico8 you will *need* lua. This project is merely a cool side-project for me and a way to prototype very small games using my favorite language.
+
+I don't have anything against lua, I just prefer to use typescript with full typings, inheritance and more.
+
+### ... not jspicl ?
+
+[jspicl](https://jspicl.github.io/) is not active anymore and have a lot more limitations compared to TypescriptToLua.
+
+@tmountain did a really nice job with [pico-8-typescript](https://github.com/tmountain/pico-8-typescript) but I still feel too limited.
+
+### ... bun ?
+
+Bun is fast and really easy to work with. I didn't have to learn how babel, rollup or parcel work, I just use `Bun.build()` and everything worked.
+
+If you really don't want to use bun for your games, I could compile and distribute standalone executable. (thanks to `bun build --compile` 😁)
 
 ## Development
 
-Build the cli with
+Feel free to open issues and PR. This project still need refinement.
 
-```sh
-bun build:cli
-```
+### Todo
 
-Build the constants files with
-
-```sh
-bun build:js
-```
+- [ ] Convert Math lib to pico8 standard lib 
+- [ ] Create a bun template to use `bun create tstp8`
