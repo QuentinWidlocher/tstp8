@@ -134,9 +134,9 @@ if (!result.success) {
   process.exit(1);
 }
 
-const { entryPoint, outDir, watch } = result.data;
+const { entryPoint, outDir, watch, debug } = result.data;
 
-transpileProject(entryPoint, outDir);
+transpileProject(entryPoint, outDir, debug);
 if (watch) {
-  watchProject(entryPoint, outDir);
+  watchProject(entryPoint, outDir, debug);
 }
