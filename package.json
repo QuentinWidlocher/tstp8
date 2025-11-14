@@ -2,6 +2,14 @@
   "name": "tstp8",
   "version": "0.2.0",
   "description": "Convert your Typescript project to Pico-8 Lua",
+  "keywords": [
+    "typescript",
+    "pico8",
+    "lua"
+  ],
+  "author": "QuentinWidlocher",
+  "repository": "https://github.com/quentinWidlocher/tstp8",
+  "license": "GPL-3.0-only",
   "private": false,
   "scripts": {
     "build": "bun build ./src/index.ts --production --target bun --banner \"#!/usr/bin/env bun\" --external pnpapi --external typescript --outfile ./out/tstp8",
