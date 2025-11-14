@@ -1,6 +1,6 @@
 {
   "name": "tstp8",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Convert your Typescript project to Pico-8 Lua",
   "keywords": [
     "typescript",
