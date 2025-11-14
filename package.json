@@ -17,6 +17,10 @@
   },
   "types": "./src/declarations/pico8-global.d.ts",
   "module": "./src/declarations/constants.ts",
+  "files": [
+    "./src/declarations/pico8-global.d.ts",
+    "./src/declarations/constants.ts"
+  ],
   "exports": {
     ".": {
       "types": "./src/declarations/pico8-global.d.ts",
