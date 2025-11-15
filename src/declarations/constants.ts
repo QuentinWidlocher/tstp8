@@ -37,7 +37,7 @@ export enum Color {
 }
 
 /**
- * @see https://pico-8.fandom.com/wiki/Btn
+ * @see http://pico8wiki.com/index.php?title=Btn
  */
 export enum Button {
   up = 2,
@@ -47,6 +47,17 @@ export enum Button {
   O = 4,
   X = 5,
   pause = 6,
+}
+
+export enum Flag {
+  zero = 0,
+  one = 1,
+  two = 2,
+  three = 3,
+  four = 4,
+  five = 5,
+  six = 6,
+  seven = 7,
 }
 
 export const ScreenSize = 128;
