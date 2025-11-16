@@ -552,7 +552,7 @@ declare global {
   function min(first: number, second?: number): number;
 
   /**
-   * Generates a random number under the given limit, or returns a random element from a sequence.
+   * Generates a random number under the given limit
 
    * @param limit Non-inclusive. Defaults to a limit of 1.0.
    * @see http://pico8wiki.com/index.php?title=rnd
@@ -560,7 +560,7 @@ declare global {
   function rnd(limit?: number): number;
 
   /**
-   * Generates a random number under the given limit, or returns a random element from a sequence.
+   * Returns a random element from a sequence.
 
    * @param table The table
    * @see http://pico8wiki.com/index.php?title=rnd
@@ -686,4 +686,18 @@ declare global {
     trace(...optionalParams: Primitive[]): void;
   }
   var console: Console;
+
+  // Since it will be transpiled to use pico8 math lib, we could make it easier to use
+  interface Math {
+    /**
+     * Returns a pseudorandom number between 0 and limit.
+     */
+    random(limit: number): number;
+    /**
+     * Returns a random element from a sequence.
+     * @param table
+     */
+    random<T>(table: Array<T>): T;
+  }
+  var Math: Math;
 }
