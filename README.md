@@ -112,3 +112,19 @@ Feel free to open issues and PR. This project still need refinement.
 
 - [ ] Convert Math lib to pico8 standard lib 
 - [ ] Create a bun template to use `bun create tstp8`
+
+## Troubleshooting
+
+### `Cannot find native binding [...]`
+
+[It's a known issue in `oxc-transform`.](https://oxc.rs/docs/guide/troubleshooting.html#cannot-find-native-binding-npm-has-a-bug-related-to-optional-dependencies)
+
+For some reasons Bun have a hard time installing optional dependencies too, and `rm bun.lock && rm -r node_modules && bun i` don't work 😕.
+
+To solve this issue you can install `@oxc-transform/binding-<your architecture>` in you project. 
+
+For example, on arm macbook you need to run :
+
+```
+bun add @oxc-transform/binding-darwin-arm64
+```

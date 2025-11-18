@@ -12,7 +12,8 @@
   "license": "GPL-3.0-only",
   "private": false,
   "scripts": {
-    "build": "bun build ./src/index.ts --production --target bun --banner \"#!/usr/bin/env bun\" --external pnpapi --external typescript --outfile ./out/tstp8",
+    "build": "bun build ./src/index.ts --production --target bun --banner \"#!/usr/bin/env bun\" --external typescript --outfile ./out/tstp8",
+    "build:dev": "bun build ./src/index.ts --target bun --banner \"#!/usr/bin/env bun\" --external typescript --outfile ./out/tstp8",
     "dev": "bun run ./src/index.ts"
   },
   "types": "./src/declarations/pico8-global.d.ts",
@@ -37,10 +38,13 @@
   },
   "devDependencies": {
     "@types/bun": "latest",
+    "oxc-transform": "^0.98.0",
     "type-fest": "^5.2.0",
-    "oxc-transform": "^0.97.0",
-    "zod": "^4.1.12",
-    "typescript-to-lua": "^1.33.0"
+    "typescript-to-lua": "^1.33.0",
+    "zod": "^4.1.12"
+  },
+  "overrides": {
+    "enhanced-resolve": "5.18.3"
   },
   "peerDependencies": {
     "typescript": "^5.9.3"

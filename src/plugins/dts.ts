@@ -34,7 +34,7 @@ export function dts(): BunPlugin {
         builder.onLoad({ filter: /\.ts$/ }, async (args) => {
           if (args.path.startsWith(rootPath) && !wroteTrack.has(args.path)) {
             wroteTrack.add(args.path);
-            const { code } = isolatedDeclaration(
+            const { code } = await isolatedDeclaration(
               args.path,
               await Bun.file(args.path).text()
             );
